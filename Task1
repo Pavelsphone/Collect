@@ -1,0 +1,28 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        HashMap<Integer, String> originalMap = new HashMap<>();
+        originalMap.put(1, "one");
+        originalMap.put(2, "two");
+        originalMap.put(3, "three");
+
+        // Выводим исходную HashMap
+        System.out.println("Original HashMap: " + originalMap);
+
+        HashMap<String, Integer> reversedMap = reverseKeysAndValues(originalMap);
+
+        // Выводим результирующую HashMap
+        System.out.println("Reversed HashMap: " + reversedMap);
+    }
+
+    private static HashMap<String, Integer> reverseKeysAndValues(HashMap<Integer, String> map) {
+        HashMap<String, Integer> result = new HashMap<>();
+
+        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+            result.put(entry.getValue(), entry.getKey());
+        }
+
+        return result;
+    }
+}
