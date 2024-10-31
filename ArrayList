@@ -1,0 +1,19 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        // Исходные данные
+        ArrayList<Integer> array = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+        int k = 2; // Длина подмассива
+
+        // Вычисление средних значений для подмассивов
+        for (int i = 0; i < array.size() - k + 1; i++) {
+            double sum = 0;
+            for (int j = i; j < i + k; j++) {
+                sum += array.get(j);
+            }
+            System.out.println("Среднее значение подмассива [" + i + ", " + (i + k) + ") : " + sum / k);
+        }
+    }
+}
