@@ -1,0 +1,8 @@
+interface StudentMarks {
+    void addStudentMark(String studentName, String subject, double mark);
+    double getStudentMark(String studentFullName, String subject);
+    List<Double> getAllStudentMarksForSubject(String subject);
+    Map<String, Double> getAverageMarksBySubject();
+    List<String> getTopFiveStudentsWithExcellentMarks();
+    Set<String> getAllSubjects();
+}
