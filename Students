@@ -1,0 +1,86 @@
+import java.util.*;
+
+class StudentMarksImpl implements StudentMarks {
+    private Map<String, Map<String, Double>> marksByStudentAndSubject = new HashMap<>();
+
+    @Override
+    public void addStudentMark(String studentName, String subject, double mark) {
+        if (!marksByStudentAndSubject.containsKey(studentName)) {
+            marksByStudentAndSubject.put(studentName, new HashMap<>());
+        }
+        Map<String, Double> marksForStudent = marksByStudentAndSubject.get(studentName);
+        if (marksForStudent.containsKey(subject)) {
+            // Обновление оценки
+            marksForStudent.put(subject, mark);
+        } else {
+            // Добавление новой записи
+            marksForStudent.put(subject, mark);
+        }
+    }
+
+    @Override
+    public double getStudentMark(String studentFullName, String subject) {
+        Map<String, Double> marksForStudent = marksByStudentAndSubject.get(studentFullName);
+        if (marksForStudent != null && marksForStudent.containsKey(subject)) {
+            return marksForStudent.get(subject);
+        } else {
+            return 0; // Значение по умолчанию
+        }
+    }
+
+    @Override
+    public List<Double> getAllStudentMarksForSubject(String subject) {
+        List<Double> marks = new ArrayList<>();
+        for (Map.Entry<String, Map<String, Double>> entry : marksByStudentAndSubject.entrySet()) {
+            if (entry.getValue().containsKey(subject)) {
+                marks.add(entry.getValue().get(subject));
+            }
+        }
+        return marks;
+    }
+
+    @Override
+    public Map<String, Double> getAverageMarksBySubject() {
+        Map<String, Double> averageMarks = new HashMap<>();
+        for (String subject : getAllSubjects()) {
+            List<Double> marks = getAllStudentMarksForSubject(subject);
+            double sum = 0;
+            int count = 0;
+            for (Double mark : marks) {
+                sum += mark;
+                count++;
+            }
+            averageMarks.put(subject, sum / count);
+        }
+        return averageMarks;
+    }
+
+    @Override
+    public List<String> getTopFiveStudentsWithExcellentMarks() {
+        // Сортировка студентов по количеству оценок 5
+        TreeMap<Integer, List<String>> topFive = new TreeMap<>(Collections.reverseOrder());
+        for (Map.Entry<String, Map<String, Double>> entry : marksByStudentAndSubject.entrySet()) {
+            Map<String, Double> studentMarks = entry.getValue();
+            int excellentMarksCount = 0;
+            for (Map.Entry<String, Double> markEntry : studentMarks.entrySet()) {
+                if (markEntry.getValue() == 5) {
+                    excellentMarksCount++;
+                }
+            }
+            topFive.putIfAbsent(excellentMarksCount, new ArrayList<>());
+            topFive.get(excellentMarksCount).add(entry);
+        }
+
+        // Получение списка топ-5 студентов
+        List<String> topFiveStudents = new ArrayList<>(topFive.firstEntry().getValue());
+        return topFiveStudents;
+    }
+
+    @Override
+    public Set<String> getAllSubjects() {
+        Set<String> subjects = new HashSet<>();
+        for (Map.Entry<String, Map<String, Double>> entry : marksByStudentAndSubject.entrySet()) {
+            subjects.addAll(entry.getValue().keySet());
+        }
+        return subjects;
+    }
